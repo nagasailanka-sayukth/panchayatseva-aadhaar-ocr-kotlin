@@ -5,7 +5,6 @@
     <application
         android:name=".AadhaarOcrUtilsKotlinApplication"
         android:allowBackup="true"
-        android:fullBackupContent="@xml/backup_rules"
         android:label="@string/app_name"
         android:supportsRtl="true"
         tools:targetApi="31">
