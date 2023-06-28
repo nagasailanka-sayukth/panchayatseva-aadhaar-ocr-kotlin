@@ -12,7 +12,7 @@ class AadhaarOcrPreferences private constructor(context: Context) {
     lateinit var AADHAAR_OCR_IMAGE: ByteArray
 
     enum class Key {
-
+        AADHAAR_OCR_SCAN_SIDE,
     }
 
     companion object {

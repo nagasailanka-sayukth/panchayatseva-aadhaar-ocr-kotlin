@@ -26,7 +26,9 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.sayukth.aadhaar_ocr_utils_kotlin.R
+import com.sayukth.aadhaar_ocr_utils_kotlin.constants.Constants
 import com.sayukth.aadhaar_ocr_utils_kotlin.databinding.ActivityDetectAadhaarBinding
+import com.sayukth.aadhaar_ocr_utils_kotlin.shared_preferences.AadhaarOcrPreferences
 import com.yalantis.ucrop.UCrop
 import java.io.File
 
@@ -100,7 +102,7 @@ class DetectAadhaarActivity : AppCompatActivity() {
 
             btnFrontAadhaarCapture.setOnClickListener {
                 aadharInputTypeFlag = false
-                //PreferenceHelper.getInstance().put(AADHAAR_INPUT_TYPE, Constants.QR_CODE);
+                AadhaarOcrPreferences.getInstance()?.put(AadhaarOcrPreferences.Key.AADHAAR_OCR_SCAN_SIDE, Constants.AADHAAR_OCR_FRONT_SIDE)
                 listener.onTakeCameraSelected()
                 alertD.dismiss()
             }
@@ -108,7 +110,7 @@ class DetectAadhaarActivity : AppCompatActivity() {
 
             btnBackAadhaarCapture.setOnClickListener {
                 aadharInputTypeFlag = false
-                //PreferenceHelper.getInstance().put(AADHAAR_INPUT_TYPE, Constants.QR_CODE);
+                AadhaarOcrPreferences.getInstance()?.put(AadhaarOcrPreferences.Key.AADHAAR_OCR_SCAN_SIDE, Constants.AADHAAR_OCR_BACK_SIDE)
                 listener.onTakeCameraSelected()
                 alertD.dismiss()
             }

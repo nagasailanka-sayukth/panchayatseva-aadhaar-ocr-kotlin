@@ -7,8 +7,12 @@ import android.util.SparseArray
 import com.google.android.gms.vision.Frame
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
+import com.sayukth.aadhaar_ocr_utils_kotlin.constants.Constants
 import com.sayukth.aadhaar_ocr_utils_kotlin.error.ActivityException
+import com.sayukth.aadhaar_ocr_utils_kotlin.shared_preferences.AadhaarOcrPreferences
 import com.sayukth.aadhaar_ocr_utils_kotlin.utils.DateUtils
+import com.sayukth.aadhaar_ocr_utils_kotlin.utils.StringSplitUtils
+import com.sayukth.aadhaar_ocr_utils_kotlin.utils.ToastUtils
 import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -25,6 +29,10 @@ class DetectAadhaarPresenter(
     var metadataMap = HashMap<String?, String?>()
 
     override fun getImageDataAsText(photo: Bitmap?) {
+
+        val aadhaarOcrScanSide: String = AadhaarOcrPreferences.getInstance()
+            ?.getString(AadhaarOcrPreferences.Key.AADHAAR_OCR_SCAN_SIDE, "") ?: ""
+
         val textRecognizer = TextRecognizer.Builder(activity).build()
         val imageFrame = Frame.Builder().setBitmap(photo).build()
 
@@ -37,12 +45,41 @@ class DetectAadhaarPresenter(
             Log.d("Language : ", imageText + " : " + textBlock.getLanguage())
             stringBuilder.append("#$imageText#")
             stringBuilder.append("\n")
-            getTextType(imageText)
+
+
+
+            if (aadhaarOcrScanSide == Constants.AADHAAR_OCR_BACK_SIDE) {
+
+                getFSTextType(imageText)
+//                setFatherOrSpouseMetaData(imageText)
+
+            } else if (aadhaarOcrScanSide == Constants.AADHAAR_OCR_FRONT_SIDE) {
+                getTextType(imageText)
+            }
+
         }
-        //made the changes for commit
-//        textResult.setText(stringBuilder.toString());
-//        detectAadharView.showAadhaardata(stringBuilder.toString());
+
+
         detectAadhaarView.showAadhaarInfo(metadataMap)
+    }
+
+    fun getFSTextType(`val`: String) {
+        try {
+            val type = ""
+            if (`val`.contains("\n")) {
+                val valArr = `val`.split("\n").toTypedArray()
+                if (valArr.size > 0) {
+                    for (newlineIdx in valArr.indices) {
+                        Log.i("OCR String Builder $newlineIdx : ", valArr[newlineIdx].toString())
+                        setFatherOrSpouseMetaData(valArr[newlineIdx])
+                    }
+                }
+            } else {
+                Log.i("OCR String Builder $ : ", `val`)
+                setFatherOrSpouseMetaData(`val`)
+            }
+        } catch (e: ActivityException) {
+        }
     }
 
     fun getTextType(`val`: String) {
@@ -52,13 +89,30 @@ class DetectAadhaarPresenter(
                 val valArr = `val`.split("\n").toTypedArray()
                 if (valArr.size > 0) {
                     for (newlineIdx in valArr.indices) {
+                        Log.i("OCR String Builder $newlineIdx : ", valArr[newlineIdx].toString())
                         setMetaData(valArr[newlineIdx])
                     }
                 }
             } else {
+                Log.i("OCR String Builder $ : ", `val`)
                 setMetaData(`val`)
             }
         } catch (e: ActivityException) {
+        }
+    }
+
+
+    @Throws(ActivityException::class)
+    fun setFatherOrSpouseMetaData(`val`: String) {
+        val srcVal = `val`.uppercase(Locale.getDefault())
+        if (srcVal.contains("ADDRESS")) {
+            val metaData = "FATHER"
+            val text: String = StringSplitUtils.getLastPartOfStringBySplitString(`val`, ":")
+            val fsNameWithCareOf: String = StringSplitUtils.getFirstPartOfStringBySplitString(text, ",")
+            val fsName: String = StringSplitUtils.getLastPartOfStringBySplitString(fsNameWithCareOf.trim { it <= ' ' }, " ")
+            metadataMap[metaData] = fsName.trim { it <= ' ' }
+        } else {
+            ToastUtils.showLongToast("Please Scan Aadhaar Back Side Accurately", activity)
         }
     }
 

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.karumi.dexter.Dexter
@@ -77,11 +78,14 @@ class MainActivity : AppCompatActivity(), DetectAadhaarContract.View {
 
     override fun showAadhaarInfo(map: HashMap<String?, String?>?) {
         try {
-//            map!!.forEach(BiConsumer { k: String, v: String ->
-//                println(
-//                    "K: $k:V$v"
-//                )
-//            })
+
+
+            map?.forEach { (key, value) ->
+                Log.i("ocr info : ", "Key = $key :  Value = $value")
+            }
+
+
+
             val aadhaarData = StringBuilder("Aadhaar Data : \n")
             //            Log.i("MainActivity", map + " ");
             var aadharId = map!!["AADHAR"]
@@ -121,13 +125,11 @@ class MainActivity : AppCompatActivity(), DetectAadhaarContract.View {
                     )
                 } else if (genderStr == "F" || genderStr.startsWith("F")) {
                     aadhaarData.append(
-                        """ Gender : Female , 
-"""
+                        """ Gender : Female , """
                     )
                 } else {
                     aadhaarData.append(
-                        """ Gender : Other , 
-"""
+                        """ Gender : Other , """
                     )
                 }
             }
@@ -136,17 +138,36 @@ class MainActivity : AppCompatActivity(), DetectAadhaarContract.View {
 //            if (dob != null) {
 //                aadhaarData.append(" Dob : " + dob + ", \n");
             binding.tvAadhaarData!!.text = aadhaarData
-            val otherStr = map!!["FATHER"]
+            val fsNameStr = map!!["FATHER"]
             //            PanchayatSevaUtilities.showToast(otherStr + " ");
-            if (otherStr != null && otherStr != " ") {
+            if (fsNameStr != null && fsNameStr != " ") {
                 val nameRegex = "^[a-zA-Z\\s]*$"
                 val fsNameStr =
-                    Arrays.toString(otherStr.split(nameRegex.toRegex(), limit = 1).toTypedArray())
-                fatherOrSpouseName!!.setText(otherStr)
+                    Arrays.toString(fsNameStr.split(nameRegex.toRegex(), limit = 1).toTypedArray())
+                fatherOrSpouseName?.setText(fsNameStr)
                 aadhaarData.append("FATHER NAME:").append(fatherOrSpouseName).append(" ,\n")
                 //                   String fsNameStr = PanchayatSevaUtilities.splitString(otherStr);
 //                    fatherOrSpouseName.setText(PanchayatSevaUtilities.stringToTitleCaseString(fsNameStr));
             }
+
+
+
+
+            val otherStr = map!!["OTHER"]
+
+            if (otherStr != null && otherStr != " ") {
+
+            }
+
+
+
+
+
+
+
+
+
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
