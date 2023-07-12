@@ -102,7 +102,7 @@ class DetectAadhaarActivity : AppCompatActivity() {
 
             btnFrontAadhaarCapture.setOnClickListener {
                 aadharInputTypeFlag = false
-                AadhaarOcrPreferences.getInstance()?.put(AadhaarOcrPreferences.Key.AADHAAR_OCR_SCAN_SIDE, Constants.AADHAAR_OCR_FRONT_SIDE)
+//                AadhaarOcrPreferences.getInstance()?.put(AadhaarOcrPreferences.Key.AADHAAR_OCR_SCAN_SIDE, Constants.AADHAAR_OCR_FRONT_SIDE)
                 listener.onTakeCameraSelected()
                 alertD.dismiss()
             }
@@ -110,7 +110,7 @@ class DetectAadhaarActivity : AppCompatActivity() {
 
             btnBackAadhaarCapture.setOnClickListener {
                 aadharInputTypeFlag = false
-                AadhaarOcrPreferences.getInstance()?.put(AadhaarOcrPreferences.Key.AADHAAR_OCR_SCAN_SIDE, Constants.AADHAAR_OCR_BACK_SIDE)
+//                AadhaarOcrPreferences.getInstance()?.put(AadhaarOcrPreferences.Key.AADHAAR_OCR_SCAN_SIDE, Constants.AADHAAR_OCR_BACK_SIDE)
                 listener.onTakeCameraSelected()
                 alertD.dismiss()
             }

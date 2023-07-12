@@ -30,8 +30,8 @@ class DetectAadhaarPresenter(
 
     override fun getImageDataAsText(photo: Bitmap?) {
 
-        val aadhaarOcrScanSide: String = AadhaarOcrPreferences.getInstance()
-            ?.getString(AadhaarOcrPreferences.Key.AADHAAR_OCR_SCAN_SIDE, "") ?: ""
+//        val aadhaarOcrScanSide: String = AadhaarOcrPreferences.getInstance()
+//            ?.getString(AadhaarOcrPreferences.Key.AADHAAR_OCR_SCAN_SIDE, "") ?: ""
 
         val textRecognizer = TextRecognizer.Builder(activity).build()
         val imageFrame = Frame.Builder().setBitmap(photo).build()
@@ -48,14 +48,14 @@ class DetectAadhaarPresenter(
 
 
 
-            if (aadhaarOcrScanSide == Constants.AADHAAR_OCR_BACK_SIDE) {
+//            if (aadhaarOcrScanSide == Constants.AADHAAR_OCR_BACK_SIDE) {
 
-                getFSTextType(imageText)
+//                getFSTextType(imageText)
 //                setFatherOrSpouseMetaData(imageText)
 
-            } else if (aadhaarOcrScanSide == Constants.AADHAAR_OCR_FRONT_SIDE) {
+//            } else if (aadhaarOcrScanSide == Constants.AADHAAR_OCR_FRONT_SIDE) {
                 getTextType(imageText)
-            }
+//            }
 
         }
 
